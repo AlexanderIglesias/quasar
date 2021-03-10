@@ -2,6 +2,7 @@ package com.mercadolibre.challenge.quasar.data.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,14 @@ public class SatelliteServiceImpl implements SatelliteService {
 	public Response getLocation(List<SatelliteDTO> listSat) throws SatelliteException {
 
 		Response response = new Response();
-
+		PositionDTO p = null;
 		SatelliteDTO kenobi = this.findSat("Kenobi", listSat);
 		SatelliteDTO sato = this.findSat("Sato", listSat);
 		SatelliteDTO skyWalker = this.findSat("Skywalker", listSat);
 
-		PositionDTO p = utils.calculatePosition(kenobi, sato, skyWalker);
+		if (Objects.nonNull(kenobi) && Objects.nonNull(sato) && Objects.nonNull(skyWalker)) {
+			p = utils.calculatePosition(kenobi, sato, skyWalker);
+		}
 
 		response.setMessage(this.getMessage(listSat));
 		response.setPosition(p);

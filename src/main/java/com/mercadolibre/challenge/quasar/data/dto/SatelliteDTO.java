@@ -14,11 +14,14 @@ public class SatelliteDTO {
 	private PositionDTO position;
 
 	public SatelliteDTO(String name, String[] message, Float distance, PositionDTO position) {
-		super();
 		this.name = name;
 		this.message = message;
 		this.distance = distance;
 		this.position = position;
+	}
+	
+	public SatelliteDTO() {
+		super();
 	}
 
 

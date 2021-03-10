@@ -29,24 +29,19 @@ public class CommonServices {
 	MathUtils utils;
 
 	@Autowired
-	@Qualifier("mapper")
+	@Qualifier("quasarMapper")
 	private Mapper mapper;
 
-	public Response calculateCoordinates(SatelliteList sats) {
+	public Response calculateCoordinates(SatelliteList sats) throws SatelliteException {
 		Response response = new Response();
-		try {
-			List<SatelliteDTO> listSat = findAndConfigureSats(sats);
-			if (!validateSats(listSat)) {
-				SatelliteException satException = new SatelliteException("Error in Satcom", null);
-				response.setMessage(satException.getMessage());
-				return response;
-			}
 
-			return satelliteService.getLocation(listSat);
-		} catch (SatelliteException e) {
-			e.printStackTrace();
+		List<SatelliteDTO> listSat = findAndConfigureSats(sats);
+		if (!validateSats(listSat)) {
+			response.setMessage("error in satcom");
+			return response;
 		}
-		return response;
+
+		return satelliteService.getLocation(listSat);
 
 	}
 
@@ -139,22 +134,22 @@ public class CommonServices {
 		List<SatelliteDTO> satelliteList = new ArrayList<>();
 		if (!satellitesEntity.isEmpty()) {
 			for (SatelliteEntity entity : satellitesEntity) {
-				SatelliteDTO satellite = mapper.map(entity, SatelliteDTO.class);
+				SatelliteDTO satellite = mapper.map(entity, SatelliteDTO.class, "entityToDTO");
 				satelliteList.add(satellite);
 			}
 		}
-		if ( !satelliteList.isEmpty()) {
+		if (!satelliteList.isEmpty()) {
 			return satelliteService.getLocation(satelliteList);
 		}
 		return null;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public boolean requestCreateSatellite(String satelliteName, SatelliteDTO satellite) {
+	public boolean requestcreatesatellite(String satelliteName, SatelliteDTO satellite) throws Exception {
 
 		satellite.setName(satelliteName);
 
-		SatelliteEntity entity = mapper.map(satellite, SatelliteEntity.class);
+		SatelliteEntity entity = mapper.map(satellite, SatelliteEntity.class, "dtoToEntity");
 		SatelliteEntity entityCreated = satelliteService.getByName(entity.getName());
 		if (entityCreated != null) {
 			entity.setId(entityCreated.getId());

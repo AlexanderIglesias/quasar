@@ -38,7 +38,7 @@ public class Controller {
 	@CrossOrigin
 	@RequestMapping(path = "/topsecret")
 	public @ResponseBody ResponseEntity<Response> getLocation(
-			@Valid @NotNull(message = "SATELLITE REQUIRED") @RequestBody SatelliteList sats) {
+			@Valid @NotNull(message = "SATELLITE REQUIRED") @RequestBody SatelliteList sats) throws SatelliteException {
 		Response response = null;
 		HttpStatus status = HttpStatus.OK;
 		if (sats.getSatellites() == null) {
@@ -56,6 +56,10 @@ public class Controller {
 			LOGGER.info(response.getMessage());
 			return ResponseEntity.status(status).body(response);
 		}
+		if(response==null) {
+			status = HttpStatus.NOT_FOUND;
+			LOGGER.info("response is null");
+		}
 		return ResponseEntity.status(status).body(response);
 	}
 
@@ -66,7 +70,7 @@ public class Controller {
 			@RequestBody SatelliteDTO satellite) {
 		Response response = new Response();
 		try {
-			boolean created = commonServices.requestCreateSatellite(satelliteName, satellite);
+			boolean created = commonServices.requestcreatesatellite(satelliteName, satellite);
 			if (!created) {
 				response.setMessage(MessageUtils.WOOKIE_PROBLEM);
 				response.setSuccess(created);
@@ -80,7 +84,7 @@ public class Controller {
 		}
 		response.setMessage(MessageUtils.WOOKIE_OK);
 		response.setSuccess(Boolean.TRUE);
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@CrossOrigin

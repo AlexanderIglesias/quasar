@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://dozer.sourceforge.net
+<mappings xmlns="http://dozer.sourceforge.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<mapping map-id="entityToDTO">
+		<class-a>com.mercadolibre.challenge.quasar.data.service.impl.db.entity.SatelliteEntity</class-a>
+		<class-b>com.mercadolibre.challenge.quasar.data.dto.SatelliteDTO</class-b>
+		<field>
+			<a>position.id</a>
+			<b>position.id</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-id="dtoToEntity">
+		<class-a>com.mercadolibre.challenge.quasar.data.dto.SatelliteDTO</class-a>
+		<class-b>com.mercadolibre.challenge.quasar.data.service.impl.db.entity.SatelliteEntity</class-b>
+		<field>
+			<a>position.id</a>
+			<b>position.id</b>
+		</field>
+	</mapping>
 </mappings>
